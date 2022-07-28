@@ -1,4 +1,4 @@
-# core-lightning-cheatsheet
+# CLN Cheatsheet
 
 ## Table of contents
 
