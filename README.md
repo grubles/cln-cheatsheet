@@ -2,12 +2,36 @@
 
 ## Table of contents
 
-[Node administration](#node-administration)  
-[Start your CLN node](#start-your-cln-node-daemon)  
-[On-chain wallet management](#on-chain-wallet-management)  
-[Channel management](#channel-management)  
-[Payments](#payments)  
-[Node stats](#node-stats)  
+1. [Node administration](#node-administration)  
+   1. [Start your CLN node](#start-your-cln-node-daemon) 
+   2. [Show your node's info](#show-your-nodes-info)  
+   3. [Stop your CLN node](#stop-your-cln-node)  
+2. [On-chain wallet management](#on-chain-wallet-management)  
+   1. [Generate a new on-chain address](#generate-a-new-on-chain-address-for-your-cln-wallet)  
+   2. [Send an on-chain payment](#spend-bitcoin-from-your-on-chain-cln-wallet)
+3. [Channel management](#channel-management)  
+   1. [Connect to a Lightning peer](#connect-to-a-lightning-peer)
+   2. [Disconnect from a Lightning peer](#disconnect-from-a-lightning-peer)
+   3. [Force disconnect from a Lightning peer](#force-disconnect-from-a-lightning-peer)
+   4. [Open a channel to a connected peer](#open-a-channel-to-a-connected-peer)
+   5. [Open multiple channels in one transaction](#open-multiple-channels-in-one-transaction)
+   6. [Close a channel](#close-a-channel)
+4. [Payments](#payments) 
+   1. [Pay an invoice](#pay-an-invoice)  
+   2. [Pay an invoice using a specific route](#pay-an-invoice-using-a-specific-route)  
+   3. [Decode an invoice](#decode-an-invoice)
+   4. [Create an invoice](#create-an-invoice)
+   5. [List invoices created by your node](#list-invoices-created-by-your-node)
+   6. [Create a BOLT12 offer](#create-a-bolt12-offer)
+   7. [List your offers](#list-your-offers)
+   8. [Find a route from your node to a fellow Lightning peer](#find-a-route-from-your-node-to-a-fellow-lightning-peer)
+6. [Node stats](#node-stats)  
+   1. [List all outgoing satoshis currently in channels](#list-all-outgoing-satoshis-currently-in-channels)
+   2. [List all incoming satoshis currently in channels](#list-all-incoming-satoshis-currently-in-channels)
+   3. [List the total of your node's on-chain wallet outputs](#list-the-total-of-your-nodes-on-chain-wallet-outputs)
+   4. [Show the routing fees your node has earned](#show-the-routing-fees-your-node-has-earned)
+   5. [Calculate successful and failed payment forwards from last 100k attempts](#calculate-successful-and-failed-payment-forwards-from-last-100k-attempts)
+   6. [Calculate successful and failed payment forwards from last 10k attempts](#calculate-successful-and-failed-payment-forwards-from-last-10k-attempts)
 
 
 ## Node administration
@@ -55,19 +79,19 @@ Example output:
 
 ```
 
-### Stop your CLN node daemon. 
+### Stop your CLN node 
 ```
 lightning-cli stop
 ```
 
 ## On-chain wallet management
-### Generate a new on-chain address for your CLN wallet.
+### Generate a new on-chain address for your CLN wallet
 Use this to receive bitcoins that you can use later on for opening channels. Address type can be `p2sh-segwit`, `bech32`, or `all` which generates both at once.
 ```
 lightning-cli newaddr <address type>
 ```
 
-### Spend bitcoin from your on-chain CLN wallet.
+### Spend bitcoin from your on-chain CLN wallet
 Use this when you're ready to send bitcoin back to cold storage of if you need to send a payment on-chain.
 ```
 lightning-cli withdraw <destination address> <amount in satoshis>
@@ -77,7 +101,7 @@ Example:
 lightning-cli withdraw tb1q75ggprm38sl6p8x532p8jcce9fxm442axs54dy 100000
 ```
 
-### Spend bitcoin from your on-chain CLN wallet to many outputs in a single transaction.
+### Spend bitcoin from your on-chain CLN wallet to many outputs in a single transaction
 ```
 lightning-cli multiwithdraw {address1: amount},{address2: amount}, ...
 ```
@@ -183,7 +207,7 @@ lightning-cli listfunds | jq '[.channels[].channel_sat] | add'
 TODO
 ```
 
-### List all on-chain wallet outputs
+### List the total of your node's on-chain wallet outputs
 ```
 lightning-cli listfunds | jq '[.outputs[].value] | add'
 ```
@@ -193,13 +217,13 @@ lightning-cli listfunds | jq '[.outputs[].value] | add'
 lightning-cli getinfo | jq '.msatoshi_fees_collected / 1000'
 ``` 
 
-### Calculate successful / failed payment forwards from last 100k attempts
+### Calculate successful and failed payment forwards from last 100k attempts
 ```
 lightning-cli listforwards | jq '.forwards[-100000:] | map(.status) | reduce .[] as $status ({}; .[$status] = (.[$status] // 0) + 1)'
 
 ```
 
-### Calculate successful / failed payment forwards from last 10k attempts
+### Calculate successful and failed payment forwards from last 10k attempts
 ```
 lightning-cli listforwards | jq '.forwards[-10000:] | map(.status) | reduce .[] as $status ({}; .[$status] = (.[$status] // 0) + 1)'
 ```
