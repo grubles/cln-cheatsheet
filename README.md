@@ -171,9 +171,9 @@ lightning-cli close <peer id>
 ### Force close a channel
 >**Warning**:  Force closing a channel will lock up your on-chain funds for a period of time.  
 
-Broadcast a unilateral close transaction on-chain. 
+Broadcast a unilateral close transaction on-chain. The third argument is the number of seconds your CLN node will wait before force closing. The default is two days (172800 seconds). 
 ```
-lightning-cli close <peer id> true
+lightning-cli close <peer id> <n seconds to wait before unilaterally closing>
 ```
 
 ## Lightning Payments
