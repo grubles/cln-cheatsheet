@@ -175,6 +175,20 @@ Broadcast a unilateral close transaction on-chain. The third argument is the num
 ```
 lightning-cli close <peer id> <n seconds to wait before unilaterally closing>
 ```
+**When will funds be available after a unilateral close?** credit: Warren Togami
+
+Say your peer has been offline for 2+ weeks and you want to unilateral close the channel. The CSV timeout after which the funds are available to claim is typically 144 blocks for CLN. LND can be up to 2016 blocks depending on the channel capacity.
+
+```
+$ lightning-cli listpeers
+# Find the txid of the unilateral close transaction then scroll down a bit.
+
+               "status": [
+                  "CHANNELD_NORMAL:Reconnected, and reestablished.",
+                  "ONCHAIN:Tracking our own unilateral close",
+                  "ONCHAIN:3 outputs unresolved: in 139 blocks will spend DELAYED_OUTPUT_TO_US (53206ed042255fb0fae53c1fd0805832ff80869383cbddec1074965eaf3d7888:0) using OUR_DELAYED_RETURN_TO_WALLET"
+               ],
+```
 
 ## Lightning Payments
 ### Pay an invoice 
@@ -246,12 +260,14 @@ lightning-cli getinfo | jq '.msatoshi_fees_collected / 1000'
 ``` 
 
 ### Calculate successful and failed payment forwards from last 100k attempts
+Credit: fiatjaf
 ```
 lightning-cli listforwards | jq '.forwards[-100000:] | map(.status) | reduce .[] as $status ({}; .[$status] = (.[$status] // 0) + 1)'
 
 ```
 
 ### Calculate successful and failed payment forwards from last 10k attempts
+Credit: fiatjaf
 ```
 lightning-cli listforwards | jq '.forwards[-10000:] | map(.status) | reduce .[] as $status ({}; .[$status] = (.[$status] // 0) + 1)'
 ```
