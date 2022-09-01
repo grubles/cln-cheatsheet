@@ -27,8 +27,15 @@
    7. [List your offers](#list-your-offers)
    8. [Find a route from your node to a fellow Lightning peer](#find-a-route-from-your-node-to-a-fellow-lightning-peer)
 5. [Swaps](#swaps)  
-   1. [Installing Peerswap](#installing-peerswap)  
-6. [Tips and Tricks](#tips-and-tricks)  
+   1. [Installing Peerswap](#installing-peerswap) 
+6. [Bookkeeping](#bookkeeping)  
+   1. [Show all accounts and their balances](#show-all-accounts-and-their-balances)
+   2. [Dump all raw events, including on-chain fee updates](#dump-all-raw-events-including-on-chain-fee-updates)
+   3. [Show the on-chain footprint of an account](#show-the-on-chain-footprint-of-an-account)
+   4. [List every event that impacts income](#list-every-event-that-impacts-income)
+   5. [Dump income events into a CSV](#dump-income-events-into-a-csv)
+   6. [List stats on channel earnings](#list-stats-on-channel-earnings)
+7. [Tips and Tricks](#tips-and-tricks)  
    1. [List all outgoing satoshis currently in channels](#list-all-outgoing-satoshis-currently-in-channels)
    2. [List the total of your node's on-chain wallet outputs](#list-the-total-of-your-nodes-on-chain-wallet-outputs)
    3. [Show the routing fees your node has earned](#show-the-routing-fees-your-node-has-earned)
@@ -241,7 +248,41 @@ Lightning payment channels periodically need to be rebalanced in order for payme
 ### Installing Peerswap
 Peerswap is available for both CLN and LND implementations. Follow the install guide for [CLN](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_cln.md) or [LND](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_lnd.md).
 
- 
+
+## Bookkeeping  
+New in [CLN v0.12.0](https://blog.blockstream.com/core-lightning-v0-12-0/) is the `bookkeeper` plugin. This new plugin helps you keep track of how your satoshis are shuffled around in your open channels. Useful for accounting! The `bookkeeper` plugin refers to channels as "accounts" and forwarded payments, channel open / close activity, etc. are referred to as "events". 
+
+### Show all accounts and their balances  
+```
+lightning-cli bkpr-listbalances
+```
+
+### Dump all raw events, including on-chain fee updates 
+```
+lightning-cli bkpr-listaccountevents <account>
+```
+
+### Show the on-chain footprint of an account
+```
+lightning-cli bkpr-inspect <account>
+```
+
+### List every event that impacts income
+```
+lightning-cli bkpr-listincome
+```
+
+### Dump income events into a CSV
+```
+lightning-cli bkpr-dumpincomecsv <format>
+```
+
+### List stats on channel earnings
+```
+lightning-cli bkpr-channelsapy <start time> <end time>
+```
+
+
 ## Tips and Tricks
 
 ### List all outgoing satoshis currently in channels
