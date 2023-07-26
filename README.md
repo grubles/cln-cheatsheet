@@ -95,7 +95,7 @@ Example output:
 
 It's critical for the `lightningd.sqlite3` database in your CLN data directory to be continually backed up as it contains the most up to date state for your payment channels. Restoring a backup with old incorrect state will cause problems. `hsm_secret` can be safely backed up once.
 
-CLN provides extensive [documentation](https://github.com/ElementsProject/lightning/blob/master/doc/BACKUP.md) for backing up critical data your node creates. 
+CLN provides extensive [documentation]([https://github.com/ElementsProject/lightning/blob/master/doc/BACKUP.md](https://docs.corelightning.org/docs/backup-and-recovery)) for backing up critical data that your node creates. 
 
 ### Stop your CLN node 
 Shut your node down for maintenance or other tasks.
@@ -153,7 +153,7 @@ lightning-cli disconnect <node id>
 ```
 
 ### Force disconnect from a Lightning peer
-Occasionally you will need to force your CLN node to disconnect from a peer due to a bug between Lightning implementations or otherwise. Simply pass `true` to the `disconnect` after the node id to force a disconnect. CLN will then automatically try to reconnect.
+Occasionally you may need to force your CLN node to disconnect from a peer due to a bug between Lightning implementations or other reasons. Simply pass `true` to the `disconnect` after the node id to force a disconnect. CLN will then automatically try to reconnect.
 
 ```
 lightning-cli disconnect <node id> true
@@ -243,10 +243,39 @@ lightning-cli listoffers
 lightning-cli getroute
 ```
 ## Swaps
-Lightning payment channels periodically need to be rebalanced in order for payments to route successfully. There are a few ways to balance a channel ranging from circular payments within the Lightning network itself to swapping on-chain with off-chain Lightning bitcoin, or even swapping off-chain Lightning bitcoin with off-chain Liquid bitcoin (L-BTC) on the Liquid Network. Peerswap is a CLN plugin and LND-connected daemon that enables swapping.
+Lightning payment channels periodically need to be rebalanced in order for payments to route successfully. There are a few ways to balance a channel ranging from circular payments within the Lightning network itself, to swapping on-chain bitcoin with off-chain Lightning bitcoin, or even swapping off-chain Lightning bitcoin with off-chain Liquid bitcoin (L-BTC) on the Liquid Network.
 
-### Installing Peerswap
-Peerswap is available for both CLN and LND implementations. Follow the install guide for [CLN](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_cln.md) or [LND](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_lnd.md).
+[PeerSwap](https://peerswap.dev) is a CLN plugin and LND daemon that enables swapping.
+
+### Installing PeerSwap
+PeerSwap is available for both CLN and LND implementations. Follow the install guide for [CLN](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_cln.md) or [LND](https://github.com/ElementsProject/peerswap/blob/master/docs/setup_lnd.md).
+
+### Swap out
+Swap outs push sats to your peer, who in turn sends onchain coins back. This results in more inbound liquidity for that channel.
+```
+$ lightning-cli peerswap-swap-out <short channel id> <amount in sats> <asset, either btc or lbtc>
+```
+
+### Swap in
+Swap ins push sats to your side of the channel, and you send onchain coins in exchange. This results in more outbound liquidity for that channel. 
+```
+$ lightning-cli peerswap-swap-in <short channel id> <amount in sats> <asset, either btc or lbtc>
+```
+
+### Check L-BTC balance
+```
+$ lightning-cli peerswap-lbtc-getbalance
+```
+
+### List peers running PeerSwap
+```
+$ lightning-cli peerswap-listpeers
+```
+
+### Add peer to swap whitelist
+```
+$ lightning-cli peerswap-addpeer <pubkey>
+```
 
 
 ## Bookkeeping  
