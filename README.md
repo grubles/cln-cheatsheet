@@ -10,6 +10,9 @@
 2. [On-chain wallet management](#on-chain-wallet-management)  
    1. [Generate a new on-chain address](#generate-a-new-on-chain-address-for-your-cln-wallet)  
    2. [Send an on-chain payment](#spend-bitcoin-from-your-on-chain-cln-wallet)
+   3. [Spend bitcoin from your on-chain CLN wallet to many outputs in a single transaction](#spend-bitcoin-from-your-on-chain-cln-wallet-to-many-outputs-in-a-single-transaction)
+   4. [List details of your on-chain transactions](#list-details-of-your-on-chain-transactions)
+   5. [Spend specific UTXOs](#spend-specific-utxos)
 3. [Channel management](#channel-management)  
    1. [Connect to a Lightning peer](#connect-to-a-lightning-peer)
    2. [Disconnect from a Lightning peer](#disconnect-from-a-lightning-peer)
@@ -27,7 +30,12 @@
    7. [List your offers](#list-your-offers)
    8. [Find a route from your node to a fellow Lightning peer](#find-a-route-from-your-node-to-a-fellow-lightning-peer)
 5. [Swaps](#swaps)  
-   1. [Installing Peerswap](#installing-peerswap) 
+   1. [Installing Peerswap](#installing-peerswap)
+   2. [Swap out](#swap-out)
+   3. [Swap in](#swap-in)
+   4. [Check L-BTC balance](#check-l-btc-balance)
+   5. [List peers running PeerSwap](#list-peers-running-peerswap)
+   6. [Add peer to swap whitelist](#add-peer-to-swap-whitelist)
 6. [Bookkeeping](#bookkeeping)  
    1. [Show all accounts and their balances](#show-all-accounts-and-their-balances)
    2. [Dump all raw events, including on-chain fee updates](#dump-all-raw-events-including-on-chain-fee-updates)
@@ -134,6 +142,16 @@ lightning-cli multiwithdraw "[{\"tb1q75ggprm38sl6p8x532p8jcce9fxm442axs54dy\": 1
 
 ```
 lightning-cli listtransactions
+```
+
+### Spend specific UTXOs
+
+```
+lightning-cli withdraw -k destination=<address> satoshi=<use_any_amount> feerate=<fee in satoshis>perkb minconf=0 utxos='["txid:index"]'
+```
+Example:
+```
+lightning-cli withdraw -k destination=bc1q7tfayt5urfy9sulu9wcjn3hm4tj0vxsntupz3a satoshi=1000000 feerate=80000perkb minconf=0 utxos='["9245a9fc09ada2b1709d6f83ed2fa0875c91996a4c81eb6a03e84946f13c1042:0"]'
 ```
 
 ## Channel management
