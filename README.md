@@ -49,6 +49,7 @@
    3. [Show the routing fees your node has earned](#show-the-routing-fees-your-node-has-earned)
    4. [Calculate successful and failed payment forwards from last 100k attempts](#calculate-successful-and-failed-payment-forwards-from-last-100k-attempts)
    5. [Calculate successful and failed payment forwards from last 10k attempts](#calculate-successful-and-failed-payment-forwards-from-last-10k-attempts)
+   6. [List PeerSwap channels and their balance scores](#list-peerswap-channels-and-their-balance-scores)
 
 
 ## Node administration
@@ -359,4 +360,8 @@ Credit: fiatjaf
 ```
 lightning-cli listforwards | jq '.forwards[-10000:] | map(.status) | reduce .[] as $status ({}; .[$status] = (.[$status] // 0) + 1)'
 ```
-
+### List PeerSwap channels and their balance scores
+Credit: tsjk
+```
+lightning-cli peerswap-listpeers | jq '[.[].channels[] | .balance_score += 100 * (1 - (.local_balance / (.local_balance + .remote_balance)) | fabs)] | sort_by(.balance_score)'
+```
