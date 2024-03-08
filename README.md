@@ -363,5 +363,5 @@ lightning-cli listforwards | jq '.forwards[-10000:] | map(.status) | reduce .[] 
 ### List PeerSwap channels and their balance scores
 Credit: tsjk
 ```
-lightning-cli peerswap-listpeers | jq '[.[].channels[] | .balance_score += 100 * (1 - (.local_balance / (.local_balance + .remote_balance)) | fabs)] | sort_by(.balance_score)'
+lightning-cli peerswap-listpeers | jq -r '[.[].channels[] | .balance_score += 100 * (1 - (2 * (.5 - (.local_balance / (.local_balance + .remote_balance))) | fabs))] | sort_by(.balance_score)'
 ```
