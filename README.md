@@ -335,7 +335,7 @@ lightning-cli bkpr-channelsapy <start time> <end time>
 
 ### List all outgoing satoshis currently in channels
 ```
-lightning-cli listfunds | jq '[.channels[].amount_msat] | add / 1000'
+lightning-cli listfunds | jq '[.channels[].our_amount_msat] | add / 1000'
 ```
 
 ### List the total of your node's on-chain wallet outputs
