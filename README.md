@@ -335,17 +335,17 @@ lightning-cli bkpr-channelsapy <start time> <end time>
 
 ### List all outgoing satoshis currently in channels
 ```
-lightning-cli listfunds | jq '[.channels[].channel_sat] | add'
+lightning-cli listfunds | jq '[.channels[].our_amount_msat] | add / 1000'
 ```
 
 ### List the total of your node's on-chain wallet outputs
 ```
-lightning-cli listfunds | jq '[.outputs[].value] | add'
+lightning-cli listfunds | jq '[.outputs[].amount_msat] | add / 1000'
 ```
 
 ### Show the routing fees your node has earned
 ```
-lightning-cli getinfo | jq '.msatoshi_fees_collected / 1000'
+lightning-cli getinfo | jq '.fees_collected_msat / 1000'
 ``` 
 
 ### Calculate successful and failed payment forwards from last 100k attempts
