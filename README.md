@@ -19,7 +19,8 @@
    3. [Force disconnect from a Lightning peer](#force-disconnect-from-a-lightning-peer)
    4. [Open a channel to a connected peer](#open-a-channel-to-a-connected-peer)
    5. [Open multiple channels in one transaction](#open-multiple-channels-in-one-transaction)
-   6. [Close a channel](#close-a-channel)
+   6. [Open a dual funded channel](#open-a-dual-funded-channel)
+   7. [Close a channel](#close-a-channel)
 4. [Lightning Payments](#lightning-payments) 
    1. [Pay an invoice](#pay-an-invoice)  
    2. [Pay an invoice using a specific route](#pay-an-invoice-using-a-specific-route)  
@@ -186,6 +187,25 @@ lightning-cli fundchannel
 ### Open multiple channels in one transaction
 ```
 lightning-cli multifundchannel
+```
+
+### Open a dual funded channel
+>**Note**:  This requires `--experimental-dual-fund` to be enabled.
+> Learn more about [dual funded channels](https://medium.com/blockstream/setting-up-liquidity-ads-in-c-lightning-54e4c59c091d).
+
+First your need to find nodes that offer dual funding
+```
+lightning-cli listnodes | jq '.nodes[] | select(.option_will_fund != null)'
+```
+
+Open a dual funded channel of total size Z, where we contribute amount X and the remote peer amount Y. The channel open operation is a collaborative transactions between both peers (aka coinjoin). The amount we contribute will be our initial Outbound liquidity (=spending capacity) of the channel, while the requested amount from the peer will be our Inbound liquidity (=receiving capacity).    
+```
+lightning-cli fundchannel -k id=<peer_id> amount=<our_amount_sat> request_amt=<requested_amount_from_peer_sat> compact_lease=<compact_lease_from_previous_command>
+```
+
+We can also open a dual funded channel by selecting whole utxos, to avoid having any change outputs.
+```
+lightning-cli fundchannel -k id=<peer_id> amount=all request_amt=<requested_amount_from_peer_sat> compact_lease=<compact_lease_from_previous_command> utxos='["c8afe317789f3ecbd52893d2ac08be7499486df5a03c95ad063e395e931eb50a:1", "<txid>:<vout>"]'
 ```
 
 ### Close a channel
